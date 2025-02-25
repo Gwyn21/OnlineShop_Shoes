@@ -428,4 +428,97 @@ class AccountServiceTest {
                 .hasMessageContaining("Test exception");
         verify(accountRepository, never()).delete(any());
     }
+
+    /**
+     * Tests successful account lookup by username.
+     * Verifies that the correct account is returned when the username exists.
+     */
+    @Test
+    void findByUsername_Success() {
+        when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(account));
+
+        Optional<Account> result = accountService.findByUsername("existingUser");
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(account);
+    }
+
+    /**
+     * Tests account lookup for a non-existent username.
+     * Verifies that an empty Optional is returned.
+     */
+    @Test
+    void findByUsername_UsernameNotExist() {
+        when(accountRepository.findByUsername("nonExistingUser")).thenReturn(Optional.empty());
+
+        Optional<Account> result = accountService.findByUsername("nonExistingUser");
+        assertThat(result).isEmpty();
+    }
+
+    /**
+     * Tests account lookup with a null username.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByUsername_NullUsername() {
+        assertThatThrownBy(() -> accountService.findByUsername(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be null");
+    }
+
+    /**
+     * Tests account lookup with an empty username.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByUsername_EmptyUsername() {
+        assertThatThrownBy(() -> accountService.findByUsername(""))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be empty");
+    }
+
+    /**
+     * Tests account lookup with a blank username.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByUsername_BlankUsername() {
+        assertThatThrownBy(() -> accountService.findByUsername("   "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be blank");
+    }
+
+    /**
+     * Tests case-insensitive username lookup.
+     * Verifies that the correct account is returned regardless of username case.
+     */
+    @Test
+    void findByUsername_CaseInsensitive() {
+        // Mock repository to return account regardless of case
+        when(accountRepository.findByUsername(anyString()))
+                .thenAnswer(invocation -> {
+                    String username = invocation.getArgument(0);
+                    if (username.equalsIgnoreCase("existinguser")) {
+                        return Optional.of(account);
+                    }
+                    return Optional.empty();
+                });
+
+        Optional<Account> result = accountService.findByUsername("EXISTINGUSER");
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(account);
+    }
+
+    /**
+     * Tests proper Optional handling during account lookup.
+     * Verifies that the returned Optional contains a non-null account.
+     */
+    @Test
+    void findByUsername_OptionalHandling() {
+        when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(account));
+
+        Optional<Account> result = accountService.findByUsername("existingUser");
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get()).isNotNull();
+    }
+
 }
