@@ -520,5 +520,95 @@ class AccountServiceTest {
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get()).isNotNull();
     }
+    /**
+     * Tests successful account lookup by email.
+     * Verifies that the correct account is returned when the email exists.
+     */
+    @Test
+    void findByEmail_Success() {
+        when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(account));
+
+        Optional<Account> result = accountService.findByEmail("existing@example.com");
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(account);
+    }
+
+    /**
+     * Tests account lookup for a non-existent email.
+     * Verifies that an empty Optional is returned.
+     */
+    @Test
+    void findByEmail_EmailNotExist() {
+        when(accountRepository.findByEmail("nonExisting@example.com")).thenReturn(Optional.empty());
+
+        Optional<Account> result = accountService.findByEmail("nonExisting@example.com");
+        assertThat(result).isEmpty();
+    }
+
+    /**
+     * Tests account lookup with a null email.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByEmail_NullEmail() {
+        assertThatThrownBy(() -> accountService.findByEmail(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be null");
+    }
+
+    /**
+     * Tests account lookup with an empty email.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByEmail_EmptyEmail() {
+        assertThatThrownBy(() -> accountService.findByEmail(""))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be empty");
+    }
+
+    /**
+     * Tests account lookup with a blank email.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByEmail_BlankEmail() {
+        assertThatThrownBy(() -> accountService.findByEmail("   "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be blank");
+    }
+
+    /**
+     * Tests case-insensitive email lookup.
+     * Verifies that the correct account is returned regardless of email case.
+     */
+    @Test
+    void findByEmail_CaseInsensitive() {
+        when(accountRepository.findByEmail(anyString()))
+                .thenAnswer(invocation -> {
+                    String email = invocation.getArgument(0);
+                    if (email.equalsIgnoreCase("existing@example.com")) {
+                        return Optional.of(account);
+                    }
+                    return Optional.empty();
+                });
+
+        Optional<Account> result = accountService.findByEmail("EXISTING@EXAMPLE.COM");
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(account);
+    }
+
+    /**
+     * Tests proper Optional handling during account lookup.
+     * Verifies that the returned Optional contains a non-null account.
+     */
+    @Test
+    void findByEmail_OptionalHandling() {
+        when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(account));
+
+        Optional<Account> result = accountService.findByEmail("existing@example.com");
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get()).isNotNull();
+    }
 
 }
