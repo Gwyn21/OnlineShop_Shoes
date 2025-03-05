@@ -1,6 +1,7 @@
 package org.example.swp391.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,27 +19,34 @@ public class Account {
     @Column(name = "user_id")
     private Integer userId;
 
+    @Size(min = 6, max = 50, message = "Username must be between 6 and 50 characters")
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
+    @Size(min = 6, max = 100, message = "Email must be between 6 and 100 characters")
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Size(min = 6, max = 255, message = "Password must be between 6 and 255 characters")
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Size(max = 50, message = "First name must be less than 50 characters")
     @Column(name = "first_name", length = 50)
     private String firstName;
 
+    @Size(max = 50, message = "Last name must be less than 50 characters")
     @Column(name = "last_name", length = 50)
     private String lastName;
 
     @Column(columnDefinition = "TEXT")
     private String avatar;
 
+    @Size(min = 10, max = 10, message = "Phone number must be 10 digits")
     @Column(length = 20)
     private String phone;
 
+    @Size(max = 255, message = "Address must be less than 255 characters")
     @Column(length = 255)
     private String address;
 
