@@ -10,26 +10,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "blogs")
-public class Blog {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "blog_id")
-    private Integer blogId;
+    @Column(name = "category_id")
+    private Integer categoryId;
 
-    @Column(nullable = false, length = 150)
-    private String title;
+    @Column(nullable = false, length = 100)
+    private String name;
 
     @Column(columnDefinition = "TEXT")
-    private String content;
+    private String description;
 
-    @Column(name = "author_id")
-    private Integer authorId;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "ENUM('published', 'hidden', 'draft') default 'published'")
-    private BlogStatus status = BlogStatus.PUBLISHED;
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
+    private Boolean status = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -47,12 +43,4 @@ public class Blog {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    public enum BlogStatus {
-        PUBLISHED, HIDDEN, DRAFT
-    }
-<<<<<<< HEAD
 }
-=======
-} 
->>>>>>> origin/main

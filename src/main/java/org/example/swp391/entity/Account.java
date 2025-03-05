@@ -11,7 +11,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "account")
+<<<<<<< HEAD
 public class Account {
+=======
+public class    Account {
+>>>>>>> origin/main
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
