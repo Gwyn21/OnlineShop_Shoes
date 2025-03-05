@@ -14,16 +14,16 @@ import java.time.LocalDateTime;
 @Builder
 public class BlogResponseDTO {
     private Integer blogId;
-
+    
     private String title;
-
+    
     private String content;
-
+    
     private Integer authorId;
-
+    
     private BlogStatus status;
-
+    
     private LocalDateTime createdAt;
-
+    
     private LocalDateTime updatedAt;
-}
+} 

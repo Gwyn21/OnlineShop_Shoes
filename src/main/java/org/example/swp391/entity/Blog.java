@@ -51,8 +51,4 @@ public class Blog {
     public enum BlogStatus {
         PUBLISHED, HIDDEN, DRAFT
     }
-<<<<<<< HEAD
-}
-=======
 } 
->>>>>>> origin/main

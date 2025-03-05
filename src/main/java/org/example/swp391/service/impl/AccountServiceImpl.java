@@ -11,6 +11,8 @@ import org.example.swp391.mapper.AccountMapper;
 import org.example.swp391.repository.AccountRepository;
 import org.example.swp391.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,9 @@ public class AccountServiceImpl implements AccountService {
         // Convert DTO to Entity
         Account account = accountMapper.toAccount(accountDTO);
 
+        // Hash password
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        account.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
 
         // Set default role as USER if not specified
         account.setRole(accountDTO.getRole() != null ? accountDTO.getRole() : Role.USER);
