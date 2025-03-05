@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.swp391.constant.AccountConst;
+import org.example.swp391.constant.CategoryConst;
 
 
 @NoArgsConstructor
@@ -43,6 +44,38 @@ public enum ErrorCode {
     // Other business rules (1040-1049)
     CANNOT_DELETE_ADMIN_ERROR(1040, AccountConst.CANNOT_DELETE_ADMIN),
     USER_ID_POSITIVE_ERROR(1041, AccountConst.USER_ID_POSITIVE),
+
+
+
+
+
+
+
+    // Category existence errors (4000-4009)
+    CATEGORY_NOT_EXIST_ERROR(4000, CategoryConst.CATEGORY_NOT_EXIST),
+    NAME_EXISTED_ERROR(4001, CategoryConst.NAME_EXISTED),
+
+    // Category null checks (4010-4019)
+    CATEGORY_ID_NULL_ERROR(4010, CategoryConst.CATEGORY_ID_NULL),
+    NAME_NULL_ERROR(4011, CategoryConst.NAME_NULL),
+    CATEGORY_STATUS_NULL_ERROR(4012, CategoryConst.STATUS_NULL),
+
+    // Category empty/blank checks (4020-4029)
+    NAME_EMPTY_ERROR(4020, CategoryConst.NAME_EMPTY),
+    NAME_BLANK_ERROR(4021, CategoryConst.NAME_BLANK),
+    NAME_REQUIRED_ERROR(4022, CategoryConst.NAME_REQUIRED),
+    CATEGORY_STATUS_REQUIRED_ERROR(4023, CategoryConst.STATUS_REQUIRED),
+
+    // Category validation errors (4030-4039)
+    NAME_INVALID(4030, CategoryConst.NAME_INVALID),
+    DESCRIPTION_INVALID(4031, CategoryConst.DESCRIPTION_INVALID),
+
+    // Category other business rules (4040-4049)
+    CATEGORY_ID_POSITIVE_ERROR(4040, CategoryConst.CATEGORY_ID_POSITIVE),
+
+
+
+
     ;
 
     private int code;
