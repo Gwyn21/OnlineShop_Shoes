@@ -13,4 +13,4 @@ public interface BlogMapper {
     void updateBlog(@MappingTarget Blog blog, BlogRequestDTO request);
 
     BlogResponseDTO toBlogResponseDTO(Blog blog);
-}
+} 

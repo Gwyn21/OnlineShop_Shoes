@@ -30,10 +30,10 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 
     // Lấy danh sách blog tạo gần đây nhất
     List<Blog> findTop5ByOrderByCreatedAtDesc();
-
+    
     // Lấy danh sách blog theo AuthorId và sắp xếp theo thời gian tạo giảm dần
     List<Blog> findByAuthorIdOrderByCreatedAtDesc(Integer authorId);
-
+    
     // Đếm số lượng blog theo AuthorId
     Long countByAuthorId(Integer authorId);
-}
+} 
