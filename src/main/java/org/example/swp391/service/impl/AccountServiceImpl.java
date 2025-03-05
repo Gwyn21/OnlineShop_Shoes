@@ -29,18 +29,18 @@ public class AccountServiceImpl implements AccountService {
             throw new AppException(ErrorCode.USERNAME_NULL_ERROR);
         }
         if (account.getEmail() == null) {
-            throw new IllegalArgumentException(AccountConst.EMAIL_NULL);
+            throw new AppException(ErrorCode.EMAIL_NULL_ERROR);
         }
         if (account.getPassword() == null) {
-            throw new IllegalArgumentException(AccountConst.PASSWORD_NULL);
+            throw new AppException(ErrorCode.PASSWORD_NULL_ERROR);
         }
 
         // Ensure email and username are unique
         if (accountRepository.findByEmail(account.getEmail()).isPresent()) {
-            throw new IllegalArgumentException(AccountConst.EMAIL_EXISTED);
+            throw new AppException(ErrorCode.EMAIL_EXISTED_ERROR);
         }
         if (accountRepository.findByUsername(account.getUsername()).isPresent()) {
-            throw new IllegalArgumentException(AccountConst.USERNAME_EXISTED);
+            throw new AppException(ErrorCode.USERNAME_EXISTED_ERROR);
         }
 
         // Set default role as USER
@@ -59,14 +59,14 @@ public class AccountServiceImpl implements AccountService {
     public Account updateAccount(Integer userId, Account updatedAccount) {
         // Find account by ID
         Account existingAccount = accountRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(AccountConst.ACCOUNT_NOT_EXIST));
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXIST_ERROR));
 
         // Check if new username already exists
         if (updatedAccount.getUsername() != null) {
             Optional<Account> accountWithSameUsername = accountRepository.findByUsername(updatedAccount.getUsername());
             if (accountWithSameUsername.isPresent() &&
                     !accountWithSameUsername.get().getUserId().equals(existingAccount.getUserId())) {
-                throw new IllegalArgumentException("Username already exists");
+                throw new AppException(ErrorCode.USERNAME_EXISTED_ERROR);
             }
             existingAccount.setUsername(updatedAccount.getUsername());
         }
@@ -76,7 +76,7 @@ public class AccountServiceImpl implements AccountService {
             Optional<Account> accountWithSameEmail = accountRepository.findByEmail(updatedAccount.getEmail());
             if (accountWithSameEmail.isPresent() &&
                     !accountWithSameEmail.get().getUserId().equals(existingAccount.getUserId())) {
-                throw new IllegalArgumentException("Email already exists");
+                throw new AppException(ErrorCode.EMAIL_EXISTED_ERROR);
             }
             existingAccount.setEmail(updatedAccount.getEmail());
         }
@@ -113,11 +113,11 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccount(Integer userId) {
         // Find account by ID
         Account account = accountRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(AccountConst.ACCOUNT_NOT_EXIST));
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXIST_ERROR));
     
         // Không cho phép xóa tài khoản ADMIN
         if (account.getRole() == Role.ADMIN) {
-            throw new IllegalArgumentException(AccountConst.CANNOT_DELETE_ADMIN);
+            throw new AppException(ErrorCode.CANNOT_DELETE_ADMIN_ERROR);
         }
     
         // Nếu không phải ADMIN, thực hiện xóa
@@ -128,13 +128,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<Account> findByUsername(String username) {
         if (username == null) {
-            throw new IllegalArgumentException(AccountConst.USERNAME_NULL);
+            throw new AppException(ErrorCode.USERNAME_NULL_ERROR);
         }
         if (username.isEmpty()) {
-            throw new IllegalArgumentException(AccountConst.USERNAME_EMPTY);
+            throw new AppException(ErrorCode.USERNAME_EMPTY_ERROR);
         }
         if (username.trim().isEmpty()) {
-            throw new IllegalArgumentException(AccountConst.USERNAME_BLANK);
+            throw new AppException(ErrorCode.USERNAME_BLANK_ERROR);
         }
         return accountRepository.findByUsername(username);
     }
@@ -142,13 +142,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<Account> findByEmail(String email) {
         if (email == null) {
-            throw new IllegalArgumentException(AccountConst.EMAIL_NULL);
+            throw new AppException(ErrorCode.EMAIL_NULL_ERROR);
         }
         if (email.isEmpty()) {
-            throw new IllegalArgumentException(AccountConst.EMAIL_EMPTY);
+            throw new AppException(ErrorCode.EMAIL_EMPTY_ERROR);
         }
         if (email.trim().isEmpty()) {
-            throw new IllegalArgumentException(AccountConst.EMAIL_BLANK);
+            throw new AppException(ErrorCode.EMAIL_BLANK_ERROR);
         }
         return accountRepository.findByEmail(email);
     }
@@ -156,10 +156,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<Account> findById(Integer userId) {
         if (userId == null) {
-            throw new IllegalArgumentException(AccountConst.USER_ID_NULL);
+            throw new AppException(ErrorCode.USER_ID_NULL_ERROR);
         }
         if (userId <= 0) {
-            throw new IllegalArgumentException(AccountConst.USER_ID_POSITIVE);
+            throw new AppException(ErrorCode.USER_ID_POSITIVE_ERROR);
         }
         return accountRepository.findById(userId);
     }

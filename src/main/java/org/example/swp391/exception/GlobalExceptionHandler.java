@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    ResponseEntity<ApiResponse> handlingIllegalException(IllegalArgumentException exception) {
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse> handlingIllegalException(Exception exception) {
         ApiResponse response = new ApiResponse();
-        response.setCode(1001);
-        response.setMessage(exception.getMessage());
+        response.setCode(ErrorCode.UNCATEGORIZED_ERROR.getCode());
+        response.setMessage(ErrorCode.UNCATEGORIZED_ERROR.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -30,7 +30,21 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler (value = MethodArgumentNotValidException.class)
-    ResponseEntity<String> handlingMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-        return ResponseEntity.badRequest().body(exception.getFieldError().getDefaultMessage());
+    ResponseEntity<ApiResponse> handlingValidationException(MethodArgumentNotValidException exception) {
+        String enumKey = exception.getFieldError().getDefaultMessage();
+
+        ErrorCode errorCode = ErrorCode.INVALID_KEY;
+
+        try {
+            errorCode = ErrorCode.valueOf(enumKey);
+        } catch (IllegalArgumentException e) {
+            errorCode = ErrorCode.INVALID_KEY;
+        }
+
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 }
