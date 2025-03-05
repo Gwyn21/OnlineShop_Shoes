@@ -21,7 +21,7 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
-
+    
     @Autowired
     private BlogMapper blogMapper;
 
@@ -82,4 +82,4 @@ public class BlogController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(blogs);
     }
-}
+} 
