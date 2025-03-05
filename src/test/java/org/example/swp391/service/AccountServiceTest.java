@@ -65,8 +65,8 @@ class AccountServiceTest {
         when(accountRepository.findByEmail(anyString())).thenReturn(Optional.of(account));
 
         assertThatThrownBy(() -> accountService.createAccount(account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Email already exists");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Email already exists");
     }
 
     /**
@@ -78,8 +78,8 @@ class AccountServiceTest {
         when(accountRepository.findByUsername(anyString())).thenReturn(Optional.of(account));
 
         assertThatThrownBy(() -> accountService.createAccount(account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Username already exists");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Username already exists");
     }
 
     /**
@@ -127,8 +127,8 @@ class AccountServiceTest {
         account.setUsername(null);
 
         assertThatThrownBy(() -> accountService.createAccount(account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Username cannot be null");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Username cannot be null");
     }
 
     /**
@@ -140,8 +140,8 @@ class AccountServiceTest {
         account.setEmail(null);
 
         assertThatThrownBy(() -> accountService.createAccount(account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Email cannot be null");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Email cannot be null");
     }
 
     /**
@@ -153,8 +153,8 @@ class AccountServiceTest {
         account.setPassword(null);
 
         assertThatThrownBy(() -> accountService.createAccount(account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Password cannot be null");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Password cannot be null");
     }
 
     /**
@@ -226,8 +226,8 @@ class AccountServiceTest {
         when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> accountService.updateAccount(1, account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Account does not exist");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Account does not exist");
     }
 
     /**
@@ -240,23 +240,23 @@ class AccountServiceTest {
         Account existingAccount = new Account();
         existingAccount.setUserId(2);  // Different ID
         existingAccount.setEmail("existing@example.com");
-
+    
         // Mock the account being updated with ID 1
         account.setUserId(1);
         account.setEmail("existing@example.com");
-
+    
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
         when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(existingAccount));
-
+    
         // Try to update the account with the existing email
         assertThatThrownBy(() -> accountService.updateAccount(1, account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Email already exists");
-
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Email already exists");
+    
         // Ensure that save() is never called because of the exception
         verify(accountRepository, never()).save(any(Account.class));
     }
-
+    
 
     /**
      * Tests account update when the new username already exists for another account.
@@ -268,19 +268,19 @@ class AccountServiceTest {
         Account existingAccount = new Account();
         existingAccount.setUserId(2);  // Different ID
         existingAccount.setUsername("existingUser");
-
+    
         // Mock the account being updated with ID 1
         account.setUserId(1);
         account.setUsername("existingUser");
-
+    
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
         when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(existingAccount));
-
+    
         // Try to update the account with the existing username
         assertThatThrownBy(() -> accountService.updateAccount(1, account))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Username already exists");
-
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Username already exists");
+    
         // Ensure that save() is never called because of the exception
         verify(accountRepository, never()).save(any(Account.class));
     }
@@ -353,7 +353,7 @@ class AccountServiceTest {
     void deleteAccount_Success() {
         account.setRole(Role.USER);
         when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-
+        
         accountService.deleteAccount(1);
         verify(accountRepository, times(1)).delete(account);
     }
@@ -368,8 +368,8 @@ class AccountServiceTest {
         when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> accountService.deleteAccount(1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Account does not exist");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Account does not exist");
         verify(accountRepository, never()).delete(any());
     }
 
@@ -383,8 +383,8 @@ class AccountServiceTest {
         when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
 
         assertThatThrownBy(() -> accountService.deleteAccount(1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Cannot delete admin account");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Cannot delete admin account");
         verify(accountRepository, never()).delete(any());
     }
 
@@ -396,13 +396,13 @@ class AccountServiceTest {
     void deleteAccount_NoPermission() {
         account.setRole(Role.USER);
         when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-
+        
         // Simulate no permission scenario
         doThrow(new SecurityException("No permission")).when(accountRepository).delete(account);
-
+        
         assertThatThrownBy(() -> accountService.deleteAccount(1))
-                .isInstanceOf(SecurityException.class)
-                .hasMessageContaining("No permission");
+            .isInstanceOf(SecurityException.class)
+            .hasMessageContaining("No permission");
     }
 
     /**
@@ -412,7 +412,7 @@ class AccountServiceTest {
     void deleteAccount_DeleteCalledOnce() {
         account.setRole(Role.USER);
         when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-
+        
         accountService.deleteAccount(1);
         verify(accountRepository, times(1)).delete(account);
     }
@@ -423,10 +423,10 @@ class AccountServiceTest {
     @Test
     void deleteAccount_NoDeleteOnException() {
         when(accountRepository.findById(anyInt())).thenThrow(new IllegalArgumentException("Test exception"));
-
+        
         assertThatThrownBy(() -> accountService.deleteAccount(1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Test exception");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Test exception");
         verify(accountRepository, never()).delete(any());
     }
 
@@ -437,7 +437,7 @@ class AccountServiceTest {
     @Test
     void findByUsername_Success() {
         when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(account));
-
+        
         Optional<Account> result = accountService.findByUsername("existingUser");
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(account);
@@ -450,7 +450,7 @@ class AccountServiceTest {
     @Test
     void findByUsername_UsernameNotExist() {
         when(accountRepository.findByUsername("nonExistingUser")).thenReturn(Optional.empty());
-
+        
         Optional<Account> result = accountService.findByUsername("nonExistingUser");
         assertThat(result).isEmpty();
     }
@@ -462,8 +462,8 @@ class AccountServiceTest {
     @Test
     void findByUsername_NullUsername() {
         assertThatThrownBy(() -> accountService.findByUsername(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Username cannot be null");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Username cannot be null");
     }
 
     /**
@@ -473,8 +473,8 @@ class AccountServiceTest {
     @Test
     void findByUsername_EmptyUsername() {
         assertThatThrownBy(() -> accountService.findByUsername(""))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Username cannot be empty");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Username cannot be empty");
     }
 
     /**
@@ -484,8 +484,8 @@ class AccountServiceTest {
     @Test
     void findByUsername_BlankUsername() {
         assertThatThrownBy(() -> accountService.findByUsername("   "))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Username cannot be blank");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Username cannot be blank");
     }
 
     /**
@@ -496,14 +496,14 @@ class AccountServiceTest {
     void findByUsername_CaseInsensitive() {
         // Mock repository to return account regardless of case
         when(accountRepository.findByUsername(anyString()))
-                .thenAnswer(invocation -> {
-                    String username = invocation.getArgument(0);
-                    if (username.equalsIgnoreCase("existinguser")) {
-                        return Optional.of(account);
-                    }
-                    return Optional.empty();
-                });
-
+            .thenAnswer(invocation -> {
+                String username = invocation.getArgument(0);
+                if (username.equalsIgnoreCase("existinguser")) {
+                    return Optional.of(account);
+                }
+                return Optional.empty();
+            });
+        
         Optional<Account> result = accountService.findByUsername("EXISTINGUSER");
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(account);
@@ -516,7 +516,7 @@ class AccountServiceTest {
     @Test
     void findByUsername_OptionalHandling() {
         when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(account));
-
+        
         Optional<Account> result = accountService.findByUsername("existingUser");
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get()).isNotNull();
@@ -529,7 +529,7 @@ class AccountServiceTest {
     @Test
     void findByEmail_Success() {
         when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(account));
-
+        
         Optional<Account> result = accountService.findByEmail("existing@example.com");
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(account);
@@ -542,7 +542,7 @@ class AccountServiceTest {
     @Test
     void findByEmail_EmailNotExist() {
         when(accountRepository.findByEmail("nonExisting@example.com")).thenReturn(Optional.empty());
-
+        
         Optional<Account> result = accountService.findByEmail("nonExisting@example.com");
         assertThat(result).isEmpty();
     }
@@ -554,8 +554,8 @@ class AccountServiceTest {
     @Test
     void findByEmail_NullEmail() {
         assertThatThrownBy(() -> accountService.findByEmail(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Email cannot be null");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Email cannot be null");
     }
 
     /**
@@ -565,8 +565,8 @@ class AccountServiceTest {
     @Test
     void findByEmail_EmptyEmail() {
         assertThatThrownBy(() -> accountService.findByEmail(""))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Email cannot be empty");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Email cannot be empty");
     }
 
     /**
@@ -576,8 +576,8 @@ class AccountServiceTest {
     @Test
     void findByEmail_BlankEmail() {
         assertThatThrownBy(() -> accountService.findByEmail("   "))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Email cannot be blank");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Email cannot be blank");
     }
 
     /**
@@ -587,14 +587,14 @@ class AccountServiceTest {
     @Test
     void findByEmail_CaseInsensitive() {
         when(accountRepository.findByEmail(anyString()))
-                .thenAnswer(invocation -> {
-                    String email = invocation.getArgument(0);
-                    if (email.equalsIgnoreCase("existing@example.com")) {
-                        return Optional.of(account);
-                    }
-                    return Optional.empty();
-                });
-
+            .thenAnswer(invocation -> {
+                String email = invocation.getArgument(0);
+                if (email.equalsIgnoreCase("existing@example.com")) {
+                    return Optional.of(account);
+                }
+                return Optional.empty();
+            });
+        
         Optional<Account> result = accountService.findByEmail("EXISTING@EXAMPLE.COM");
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(account);
@@ -607,7 +607,7 @@ class AccountServiceTest {
     @Test
     void findByEmail_OptionalHandling() {
         when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(account));
-
+        
         Optional<Account> result = accountService.findByEmail("existing@example.com");
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get()).isNotNull();
@@ -620,7 +620,7 @@ class AccountServiceTest {
     @Test
     void findById_Success() {
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
-
+        
         Optional<Account> result = accountService.findById(1);
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(account);
@@ -633,7 +633,7 @@ class AccountServiceTest {
     @Test
     void findById_UserIdNotExist() {
         when(accountRepository.findById(999)).thenReturn(Optional.empty());
-
+        
         Optional<Account> result = accountService.findById(999);
         assertThat(result).isEmpty();
     }
@@ -645,8 +645,8 @@ class AccountServiceTest {
     @Test
     void findById_NullUserId() {
         assertThatThrownBy(() -> accountService.findById(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("User ID cannot be null");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("User ID cannot be null");
     }
 
     /**
@@ -656,8 +656,8 @@ class AccountServiceTest {
     @Test
     void findById_NegativeUserId() {
         assertThatThrownBy(() -> accountService.findById(-1))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("User ID must be positive");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("User ID must be positive");
     }
 
     /**
@@ -667,8 +667,8 @@ class AccountServiceTest {
     @Test
     void findById_ZeroUserId() {
         assertThatThrownBy(() -> accountService.findById(0))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("User ID must be positive");
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("User ID must be positive");
     }
 
     /**
@@ -678,7 +678,7 @@ class AccountServiceTest {
     @Test
     void findById_OptionalHandling() {
         when(accountRepository.findById(1)).thenReturn(Optional.of(account));
-
+        
         Optional<Account> result = accountService.findById(1);
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get()).isNotNull();
