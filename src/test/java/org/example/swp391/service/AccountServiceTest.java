@@ -369,86 +369,86 @@ class AccountServiceTest {
      * Tests successful account deletion for a user account.
      * Verifies that the delete operation is called exactly once.
      */
-//    @Test
-//    void deleteAccount_Success() {
-//        accountDTO.setRole(Role.USER);
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//
-//        accountService.deleteAccount(1);
-//        verify(accountRepository, times(1)).delete(account);
-//    }
-//
-//
-//    /**
-//     * Tests account deletion for a non-existent user ID.
-//     * Verifies that an IllegalArgumentException is thrown and no delete operation is performed.
-//     */
-//    @Test
-//    void deleteAccount_UserIdNotExist() {
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
-//
-//        assertThatThrownBy(() -> accountService.deleteAccount(1))
-//                .isInstanceOf(AppException.class)
-//                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
-//        verify(accountRepository, never()).delete(any());
-//    }
-//
-//    /**
-//     * Tests attempt to delete an admin account.
-//     * Verifies that an IllegalArgumentException is thrown and no delete operation is performed.
-//     */
-//    @Test
-//    void deleteAccount_CannotDeleteAdminAccount() {
-//        accountDTO.setRole(Role.ADMIN);
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//
-//        assertThatThrownBy(() -> accountService.deleteAccount(1))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Cannot delete admin account");
-//        verify(accountRepository, never()).delete(any());
-//    }
-//
-//    /**
-//     * Tests account deletion when user has no permission.
-//     * Verifies that a SecurityException is thrown.
-//     */
-//    @Test
-//    void deleteAccount_NoPermission() {
-//        accountDTO.setRole(Role.USER);
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//
-//        // Simulate no permission scenario
-//        doThrow(new SecurityException("No permission")).when(accountRepository).delete(account);
-//
-//        assertThatThrownBy(() -> accountService.deleteAccount(1))
-//                .isInstanceOf(SecurityException.class)
-//                .hasMessageContaining("No permission");
-//    }
-//
-//    /**
-//     * Tests that delete operation is called exactly once during successful account deletion.
-//     */
-//    @Test
-//    void deleteAccount_DeleteCalledOnce() {
-//        accountDTO.setRole(Role.USER);
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//
-//        accountService.deleteAccount(1);
-//        verify(accountRepository, times(1)).delete(account);
-//    }
-//
-//    /**
-//     * Tests that no delete operation is performed when an exception occurs during account lookup.
-//     */
-//    @Test
-//    void deleteAccount_NoDeleteOnException() {
-//        when(accountRepository.findById(anyInt())).thenThrow(new IllegalArgumentException("Test exception"));
-//
-//        assertThatThrownBy(() -> accountService.deleteAccount(1))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Test exception");
-//        verify(accountRepository, never()).delete(any());
-//    }
+    @Test
+    void deleteAccount_Success() {
+        accountDTO.setRole(Role.USER);
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+
+        accountService.deleteAccount(1);
+        verify(accountRepository, times(1)).delete(account);
+    }
+
+
+    /**
+     * Tests account deletion for a non-existent user ID.
+     * Verifies that an IllegalArgumentException is thrown and no delete operation is performed.
+     */
+    @Test
+    void deleteAccount_UserIdNotExist() {
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.deleteAccount(1))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
+        verify(accountRepository, never()).delete(any());
+    }
+
+    /**
+     * Tests attempt to delete an admin account.
+     * Verifies that an IllegalArgumentException is thrown and no delete operation is performed.
+     */
+    @Test
+    void deleteAccount_CannotDeleteAdminAccount() {
+        accountDTO.setRole(Role.ADMIN);
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+
+        assertThatThrownBy(() -> accountService.deleteAccount(1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Cannot delete admin account");
+        verify(accountRepository, never()).delete(any());
+    }
+
+    /**
+     * Tests account deletion when user has no permission.
+     * Verifies that a SecurityException is thrown.
+     */
+    @Test
+    void deleteAccount_NoPermission() {
+        accountDTO.setRole(Role.USER);
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+
+        // Simulate no permission scenario
+        doThrow(new SecurityException("No permission")).when(accountRepository).delete(account);
+
+        assertThatThrownBy(() -> accountService.deleteAccount(1))
+                .isInstanceOf(SecurityException.class)
+                .hasMessageContaining("No permission");
+    }
+
+    /**
+     * Tests that delete operation is called exactly once during successful account deletion.
+     */
+    @Test
+    void deleteAccount_DeleteCalledOnce() {
+        accountDTO.setRole(Role.USER);
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+
+        accountService.deleteAccount(1);
+        verify(accountRepository, times(1)).delete(account);
+    }
+
+    /**
+     * Tests that no delete operation is performed when an exception occurs during account lookup.
+     */
+    @Test
+    void deleteAccount_NoDeleteOnException() {
+        when(accountRepository.findById(anyInt())).thenThrow(new IllegalArgumentException("Test exception"));
+
+        assertThatThrownBy(() -> accountService.deleteAccount(1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Test exception");
+        verify(accountRepository, never()).delete(any());
+    }
 
     /**
      * Tests successful account lookup by username.
