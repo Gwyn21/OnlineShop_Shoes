@@ -70,121 +70,121 @@ class AccountServiceTest {
      * Tests successful account creation with unique username and email.
      * Verifies that the account is created with default Role.USER and Status.ACTIVE.
      */
-//    @Test
-//    void createAccount_Success() {
-//        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-//        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-//        when(accountRepository.save(any(Account.class))).thenReturn(account);
-//
-//        Account createdAccount = accountService.createAccount(accountDTO);
-//
-//        assertThat(createdAccount).isNotNull();
-//        assertThat(createdAccount.getRole()).isEqualTo(Role.USER);
-//        assertThat(createdAccount.getStatus()).isEqualTo(Status.ACTIVE);
-//        verify(accountRepository, times(1)).save(any(Account.class));
-//    }
-//
-//    /**
-//     * Tests account creation when the email already exists in the system.
-//     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
-//     */
-//    @Test
-//    void createAccount_EmailExists_ThrowsException() {
-//        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.of(account));
-//
-//        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Email already exists");
-//    }
-//
-//    /**
-//     * Tests account creation when the username already exists in the system.
-//     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
-//     */
-//    @Test
-//    void createAccount_UsernameExists_ThrowsException() {
-//        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.of(account));
-//
-//        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Username already exists");
-//    }
-//
-//    /**
-//     * Tests default role and status assignment during account creation.
-//     * Verifies that an account is created with Role.USER and Status.ACTIVE when not specified.
-//     */
-//    @Test
-//    void createAccount_DefaultRoleAndStatus() {
-//        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-//        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-//        when(accountRepository.save(any(Account.class))).thenReturn(account);
-//
-//        accountDTO.setRole(null);
-//        accountDTO.setStatus(null);
-//        Account createdAccount = accountService.createAccount(accountDTO);
-//
-//        assertThat(createdAccount.getRole()).isEqualTo(Role.USER);
-//        assertThat(createdAccount.getStatus()).isEqualTo(Status.ACTIVE);
-//    }
-//
-//    /**
-//     * Tests account creation with specific role and status values.
-//     * Verifies that the account is created with the specified Role and Status.
-//     */
-//    @Test
-//    void createAccount_WithSpecificRoleAndStatus() {
-//        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-//        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-//        when(accountRepository.save(any(Account.class))).thenReturn(account);
-//
-//        accountDTO.setRole(Role.ADMIN);
-//        accountDTO.setStatus(Status.INACTIVE);
-//        Account createdAccount = accountService.createAccount(accountDTO);
-//
-//        assertThat(createdAccount.getRole()).isEqualTo(Role.ADMIN);
-//        assertThat(createdAccount.getStatus()).isEqualTo(Status.INACTIVE);
-//    }
-//
-//    /**
-//     * Tests account creation with a null username.
-//     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
-//     */
-//    @Test
-//    void createAccount_NullUsername_ThrowsException() {
-//        accountDTO.setUsername(null);
-//
-//        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Username cannot be null");
-//    }
-//
-//    /**
-//     * Tests account creation with a null email.
-//     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
-//     */
-//    @Test
-//    void createAccount_NullEmail_ThrowsException() {
-//        accountDTO.setEmail(null);
-//
-//        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Email cannot be null");
-//    }
-//
-//    /**
-//     * Tests account creation with a null password.
-//     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
-//     */
-//    @Test
-//    void createAccount_NullPassword_ThrowsException() {
-//        accountDTO.setPassword(null);
-//
-//        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Password cannot be null");
-//    }
-//
+    @Test
+    void createAccount_Success() {
+        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+        Account createdAccount = accountService.createAccount(accountDTO);
+
+        assertThat(createdAccount).isNotNull();
+        assertThat(createdAccount.getRole()).isEqualTo(Role.USER);
+        assertThat(createdAccount.getStatus()).isEqualTo(Status.ACTIVE);
+        verify(accountRepository, times(1)).save(any(Account.class));
+    }
+
+    /**
+     * Tests account creation when the email already exists in the system.
+     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
+     */
+    @Test
+    void createAccount_EmailExists_ThrowsException() {
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.of(account));
+
+        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email already exists");
+    }
+
+    /**
+     * Tests account creation when the username already exists in the system.
+     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
+     */
+    @Test
+    void createAccount_UsernameExists_ThrowsException() {
+        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.of(account));
+
+        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username already exists");
+    }
+
+    /**
+     * Tests default role and status assignment during account creation.
+     * Verifies that an account is created with Role.USER and Status.ACTIVE when not specified.
+     */
+    @Test
+    void createAccount_DefaultRoleAndStatus() {
+        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+        accountDTO.setRole(null);
+        accountDTO.setStatus(null);
+        Account createdAccount = accountService.createAccount(accountDTO);
+
+        assertThat(createdAccount.getRole()).isEqualTo(Role.USER);
+        assertThat(createdAccount.getStatus()).isEqualTo(Status.ACTIVE);
+    }
+
+    /**
+     * Tests account creation with specific role and status values.
+     * Verifies that the account is created with the specified Role and Status.
+     */
+    @Test
+    void createAccount_WithSpecificRoleAndStatus() {
+        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+        accountDTO.setRole(Role.ADMIN);
+        accountDTO.setStatus(Status.INACTIVE);
+        Account createdAccount = accountService.createAccount(accountDTO);
+
+        assertThat(createdAccount.getRole()).isEqualTo(Role.ADMIN);
+        assertThat(createdAccount.getStatus()).isEqualTo(Status.INACTIVE);
+    }
+
+    /**
+     * Tests account creation with a null username.
+     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
+     */
+    @Test
+    void createAccount_NullUsername_ThrowsException() {
+        accountDTO.setUsername(null);
+
+        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be null");
+    }
+
+    /**
+     * Tests account creation with a null email.
+     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
+     */
+    @Test
+    void createAccount_NullEmail_ThrowsException() {
+        accountDTO.setEmail(null);
+
+        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be null");
+    }
+
+    /**
+     * Tests account creation with a null password.
+     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
+     */
+    @Test
+    void createAccount_NullPassword_ThrowsException() {
+        accountDTO.setPassword(null);
+
+        assertThatThrownBy(() -> accountService.createAccount(accountDTO))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Password cannot be null");
+    }
+
 //    /**
 //     * Tests successful account update with valid information.
 //     * Verifies that the account is updated and returned successfully.
