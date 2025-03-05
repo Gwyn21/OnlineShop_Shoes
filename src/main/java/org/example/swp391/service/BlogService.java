@@ -21,6 +21,6 @@ public interface BlogService {
     List<Blog> findByAuthorId(Integer authorId);
 
     List<Blog> findByStatus(BlogStatus status);
-
+    
     List<Blog> findByTitle(String title);
-}
+} 

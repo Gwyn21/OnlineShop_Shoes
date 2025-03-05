@@ -22,10 +22,10 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private BlogRepository blogRepository;
-
+    
     @Autowired
     private AccountRepository accountRepository;
-
+    
     @Autowired
     private BlogMapper blogMapper;
 
@@ -41,16 +41,16 @@ public class BlogServiceImpl implements BlogService {
         if (blogDTO.getTitle().trim().isEmpty()) {
             throw new AppException(ErrorCode.TITLE_BLANK_ERROR);
         }
-
+        
         // Validate author exists if authorId is provided
         if (blogDTO.getAuthorId() != null) {
             accountRepository.findById(blogDTO.getAuthorId())
-                    .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXIST_ERROR));
+                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXIST_ERROR));
         }
 
         // Convert DTO to Entity
         Blog blog = blogMapper.toBlog(blogDTO);
-
+        
         // Set default status as PUBLISHED if not specified
         blog.setStatus(blogDTO.getStatus() != null ? blogDTO.getStatus() : BlogStatus.PUBLISHED);
 
@@ -66,16 +66,16 @@ public class BlogServiceImpl implements BlogService {
         if (blogId <= 0) {
             throw new AppException(ErrorCode.BLOG_ID_POSITIVE_ERROR);
         }
-
+        
         // Find blog by ID
         Blog existingBlog = blogRepository.findById(blogId)
                 .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_EXIST_ERROR));
-
+        
         // Validate author exists if authorId is changed
-        if (blogDTO.getAuthorId() != null &&
-                (existingBlog.getAuthorId() == null || !existingBlog.getAuthorId().equals(blogDTO.getAuthorId()))) {
+        if (blogDTO.getAuthorId() != null && 
+            (existingBlog.getAuthorId() == null || !existingBlog.getAuthorId().equals(blogDTO.getAuthorId()))) {
             accountRepository.findById(blogDTO.getAuthorId())
-                    .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXIST_ERROR));
+                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXIST_ERROR));
         }
 
         // Update entity using mapper
@@ -93,11 +93,11 @@ public class BlogServiceImpl implements BlogService {
         if (blogId <= 0) {
             throw new AppException(ErrorCode.BLOG_ID_POSITIVE_ERROR);
         }
-
+        
         // Find blog by ID
         Blog blog = blogRepository.findById(blogId)
                 .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_EXIST_ERROR));
-
+        
         // Delete blog
         blogRepository.delete(blog);
     }
@@ -111,7 +111,7 @@ public class BlogServiceImpl implements BlogService {
         if (blogId <= 0) {
             throw new AppException(ErrorCode.BLOG_ID_POSITIVE_ERROR);
         }
-
+        
         return blogMapper.toBlogResponseDTO(blogRepository.findById(blogId)
                 .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_EXIST_ERROR)));
     }
@@ -127,11 +127,11 @@ public class BlogServiceImpl implements BlogService {
         if (authorId == null) {
             throw new AppException(ErrorCode.AUTHOR_ID_NULL_ERROR);
         }
-
+        
         // Validate author exists
         accountRepository.findById(authorId)
-                .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXIST_ERROR));
-
+            .orElseThrow(() -> new AppException(ErrorCode.AUTHOR_NOT_EXIST_ERROR));
+            
         return blogRepository.findByAuthorId(authorId);
     }
 
@@ -139,7 +139,7 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> findByStatus(BlogStatus status) {
         return blogRepository.findByStatus(status);
     }
-
+    
     @Override
     public List<Blog> findByTitle(String title) {
         if (title == null) {
@@ -147,4 +147,4 @@ public class BlogServiceImpl implements BlogService {
         }
         return blogRepository.findByTitleContaining(title);
     }
-}
+} 
