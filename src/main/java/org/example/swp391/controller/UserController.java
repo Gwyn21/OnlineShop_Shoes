@@ -1,6 +1,8 @@
 package org.example.swp391.controller;
 
 import jakarta.validation.Valid;
+import org.example.swp391.dto.request.AccountRequestDTO;
+import org.example.swp391.dto.response.AccountResponseDTO;
 import org.example.swp391.dto.response.ApiResponse;
 import org.example.swp391.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
 @RestController
 public class UserController {
     
     @Autowired
     private AccountService accountService;
-
 
     @GetMapping("/users")
     List<Account> getAllUsers() {
@@ -31,20 +30,20 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    ApiResponse<Account> createUser(@RequestBody @Valid Account account) {
+    ApiResponse<Account> createUser(@RequestBody @Valid AccountRequestDTO accountDTO) {
         ApiResponse<Account> response = new ApiResponse<>();
-        response.setResult(accountService.createAccount(account));
+        response.setResult(accountService.createAccount(accountDTO));
         return response;
     }
 
     @GetMapping("/users/{id}")
-    ResponseEntity<Account> getUserById(@PathVariable Integer id) {
-        return ResponseEntity.of(accountService.findById(id));
+    public AccountResponseDTO getUserById(@PathVariable Integer id) {
+        return accountService.findById(id);
     }
 
     @PutMapping("/users/{id}")
-    public Account updateUser(@PathVariable Integer id, @RequestBody Account entity) {
-        return accountService.updateAccount(id, entity);
+    public Account updateUser(@PathVariable Integer id, @RequestBody @Valid AccountRequestDTO accountDTO) {
+        return accountService.updateAccount(id, accountDTO);
     }
 
     @DeleteMapping("/users/{id}")

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    ResponseEntity<ApiResponse> handlingIllegalException(Exception exception) {
+    ResponseEntity<ApiResponse> handlingAppException(Exception exception) {
         ApiResponse response = new ApiResponse();
         response.setCode(ErrorCode.UNCATEGORIZED_ERROR.getCode());
         response.setMessage(ErrorCode.UNCATEGORIZED_ERROR.getMessage());

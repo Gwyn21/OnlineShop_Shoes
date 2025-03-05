@@ -1,7 +1,6 @@
 package org.example.swp391.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,34 +18,27 @@ public class Account {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Size(min = 3, max = 50, message = "USERNAME_INVALID")
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Size(min = 6, max = 100, message = "EMAIL_INVALID")
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Size(min = 6, max = 255, message = "PASSWORD_INVALID")
     @Column(nullable = false, length = 255)
     private String password;
 
-    @Size(max = 50, message = "FIRSTNAME_INVALID")
     @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @Size(max = 50, message = "LASTNAME_INVALID")
     @Column(name = "last_name", length = 50)
     private String lastName;
 
     @Column(columnDefinition = "TEXT")
     private String avatar;
 
-    @Size(min = 10, max = 10, message = "PHONE_INVALID")
     @Column(length = 20)
     private String phone;
 
-    @Size(max = 255, message = "ADDRESS_INVALID")
     @Column(length = 255)
     private String address;
 

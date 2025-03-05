@@ -1,11 +1,13 @@
 package org.example.swp391.service.impl;
 
-import org.example.swp391.constant.AccountConst;
+import org.example.swp391.dto.request.AccountRequestDTO;
+import org.example.swp391.dto.response.AccountResponseDTO;
 import org.example.swp391.entity.Account;
 import org.example.swp391.entity.Role;
 import org.example.swp391.entity.Status;
 import org.example.swp391.exception.AppException;
 import org.example.swp391.exception.ErrorCode;
+import org.example.swp391.mapper.AccountMapper;
 import org.example.swp391.repository.AccountRepository;
 import org.example.swp391.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,90 +23,69 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private AccountMapper accountMapper;
 
     @Override
-    public Account createAccount(Account account) {
+    public Account createAccount(AccountRequestDTO accountDTO) {
         // Validate required fields
-        if (account.getUsername() == null) {
+        if (accountDTO.getUsername() == null) {
             throw new AppException(ErrorCode.USERNAME_NULL_ERROR);
         }
-        if (account.getEmail() == null) {
+        if (accountDTO.getEmail() == null) {
             throw new AppException(ErrorCode.EMAIL_NULL_ERROR);
         }
-        if (account.getPassword() == null) {
+        if (accountDTO.getPassword() == null) {
             throw new AppException(ErrorCode.PASSWORD_NULL_ERROR);
         }
 
         // Ensure email and username are unique
-        if (accountRepository.findByEmail(account.getEmail()).isPresent()) {
+        if (accountRepository.findByEmail(accountDTO.getEmail()).isPresent()) {
             throw new AppException(ErrorCode.EMAIL_EXISTED_ERROR);
         }
-        if (accountRepository.findByUsername(account.getUsername()).isPresent()) {
+        if (accountRepository.findByUsername(accountDTO.getUsername()).isPresent()) {
             throw new AppException(ErrorCode.USERNAME_EXISTED_ERROR);
         }
 
-        // Set default role as USER
-        if (account.getRole() == null) {
-            account.setRole(Role.USER);
-        }
+        // Convert DTO to Entity
+        Account account = accountMapper.toAccount(accountDTO);
 
-        // Set default status as ACTIVE
-        if (account.getStatus() == null) {
-            account.setStatus(Status.ACTIVE);
-        }
+
+        // Set default role as USER if not specified
+        account.setRole(accountDTO.getRole() != null ? accountDTO.getRole() : Role.USER);
+
+        // Set default status as ACTIVE if not specified
+        account.setStatus(accountDTO.getStatus() != null ? accountDTO.getStatus() : Status.ACTIVE);
+
         return accountRepository.save(account);
     }
 
     @Override
-    public Account updateAccount(Integer userId, Account updatedAccount) {
+    public Account updateAccount(Integer userId, AccountRequestDTO accountDTO) {
         // Find account by ID
         Account existingAccount = accountRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXIST_ERROR));
 
         // Check if new username already exists
-        if (updatedAccount.getUsername() != null) {
-            Optional<Account> accountWithSameUsername = accountRepository.findByUsername(updatedAccount.getUsername());
+        if (accountDTO.getUsername() != null) {
+            Optional<Account> accountWithSameUsername = accountRepository.findByUsername(accountDTO.getUsername());
             if (accountWithSameUsername.isPresent() &&
                     !accountWithSameUsername.get().getUserId().equals(existingAccount.getUserId())) {
                 throw new AppException(ErrorCode.USERNAME_EXISTED_ERROR);
             }
-            existingAccount.setUsername(updatedAccount.getUsername());
         }
 
         // Check if new email already exists
-        if (updatedAccount.getEmail() != null) {
-            Optional<Account> accountWithSameEmail = accountRepository.findByEmail(updatedAccount.getEmail());
+        if (accountDTO.getEmail() != null) {
+            Optional<Account> accountWithSameEmail = accountRepository.findByEmail(accountDTO.getEmail());
             if (accountWithSameEmail.isPresent() &&
                     !accountWithSameEmail.get().getUserId().equals(existingAccount.getUserId())) {
                 throw new AppException(ErrorCode.EMAIL_EXISTED_ERROR);
             }
-            existingAccount.setEmail(updatedAccount.getEmail());
         }
 
-        // Update information only if not null
-        if (updatedAccount.getFirstName() != null) {
-            existingAccount.setFirstName(updatedAccount.getFirstName());
-        }
-        if (updatedAccount.getLastName() != null) {
-            existingAccount.setLastName(updatedAccount.getLastName());
-        }
-        if (updatedAccount.getPhone() != null) {
-            existingAccount.setPhone(updatedAccount.getPhone());
-        }
-        if (updatedAccount.getAddress() != null) {
-            existingAccount.setAddress(updatedAccount.getAddress());
-        }
-        if (updatedAccount.getAvatar() != null) {
-            existingAccount.setAvatar(updatedAccount.getAvatar());
-        }
-
-        // Update role and status if authorized (e.g., admin)
-        if (updatedAccount.getRole() != null) {
-            existingAccount.setRole(updatedAccount.getRole());
-        }
-        if (updatedAccount.getStatus() != null) {
-            existingAccount.setStatus(updatedAccount.getStatus());
-        }
+        // Update entity using mapper
+        accountMapper.updateAccount(existingAccount, accountDTO);
 
         return accountRepository.save(existingAccount);
     }
@@ -126,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
     
 
     @Override
-    public Optional<Account> findByUsername(String username) {
+    public AccountResponseDTO findByUsername(String username) {
         if (username == null) {
             throw new AppException(ErrorCode.USERNAME_NULL_ERROR);
         }
@@ -136,11 +117,12 @@ public class AccountServiceImpl implements AccountService {
         if (username.trim().isEmpty()) {
             throw new AppException(ErrorCode.USERNAME_BLANK_ERROR);
         }
-        return accountRepository.findByUsername(username);
+        return accountMapper.toAccountResponseDTO(accountRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXIST_ERROR)));
     }
 
     @Override
-    public Optional<Account> findByEmail(String email) {
+    public AccountResponseDTO findByEmail(String email) {
         if (email == null) {
             throw new AppException(ErrorCode.EMAIL_NULL_ERROR);
         }
@@ -150,18 +132,20 @@ public class AccountServiceImpl implements AccountService {
         if (email.trim().isEmpty()) {
             throw new AppException(ErrorCode.EMAIL_BLANK_ERROR);
         }
-        return accountRepository.findByEmail(email);
+        return accountMapper.toAccountResponseDTO(accountRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXIST_ERROR)));
     }
 
     @Override
-    public Optional<Account> findById(Integer userId) {
+    public AccountResponseDTO findById(Integer userId) {
         if (userId == null) {
             throw new AppException(ErrorCode.USER_ID_NULL_ERROR);
         }
         if (userId <= 0) {
             throw new AppException(ErrorCode.USER_ID_POSITIVE_ERROR);
         }
-        return accountRepository.findById(userId);
+        return accountMapper.toAccountResponseDTO(accountRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.ACCOUNT_NOT_EXIST_ERROR)));
     }
 
     @Override

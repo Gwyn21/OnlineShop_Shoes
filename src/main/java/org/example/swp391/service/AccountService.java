@@ -1,5 +1,7 @@
 package org.example.swp391.service;
 
+import org.example.swp391.dto.request.AccountRequestDTO;
+import org.example.swp391.dto.response.AccountResponseDTO;
 import org.example.swp391.entity.Account;
 import org.example.swp391.entity.Role;
 import org.example.swp391.entity.Status;
@@ -8,17 +10,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
-    Account createAccount(Account account);
+    Account createAccount(AccountRequestDTO accountDTO);
 
-    Account updateAccount(Integer userId, Account account);
+    Account updateAccount(Integer userId, AccountRequestDTO accountDTO);
 
     void deleteAccount(Integer userId);
 
-    Optional<Account> findByUsername(String username);
+    AccountResponseDTO findByUsername(String username);
 
-    Optional<Account> findByEmail(String email);
+    AccountResponseDTO findByEmail(String email);
 
-    Optional<Account> findById(Integer userId);
+    AccountResponseDTO findById(Integer userId);
 
     List<Account> findAll();
 
