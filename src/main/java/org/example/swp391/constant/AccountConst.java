@@ -27,4 +27,13 @@ public class AccountConst {
     public static final String USER_ID_NULL = "User ID cannot be null";
 
     public static final String USER_ID_POSITIVE = "User ID must be positive";
+
+    // Validation messages
+    public static final String USERNAME_INVALID = "Username must be between 3 and 50 characters";
+    public static final String EMAIL_INVALID = "Email must be between 6 and 100 characters";
+    public static final String PASSWORD_INVALID = "Password must be between 6 and 255 characters";
+    public static final String FIRSTNAME_INVALID = "First name must be less than 50 characters";
+    public static final String LASTNAME_INVALID = "Last name must be less than 50 characters";
+    public static final String PHONE_INVALID = "Phone number must be 10 digits";
+    public static final String ADDRESS_INVALID = "Address must be less than 255 characters";
 }
