@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.swp391.constant.AccountConst;
 import org.example.swp391.constant.BlogConst;
+import org.example.swp391.constant.SliderConst;
 
 
 @NoArgsConstructor
@@ -66,6 +67,22 @@ public enum ErrorCode {
     
     // Blog other business rules (2040-2049)
     BLOG_ID_POSITIVE_ERROR(2040, BlogConst.BLOG_ID_POSITIVE),
+    
+    // Slider existence errors (3000-3009)
+    SLIDER_NOT_EXIST_ERROR(3000, SliderConst.SLIDER_NOT_EXIST),
+    
+    // Slider null checks (3010-3019)
+    SLIDER_ID_NULL_ERROR(3010, SliderConst.SLIDER_ID_NULL),
+    STATUS_NULL_ERROR(3011, SliderConst.STATUS_NULL),
+    STATUS_REQUIRED_ERROR(3012, SliderConst.STATUS_REQUIRED),
+    
+    // Slider validation errors (3030-3039)
+    IMAGE_URL_INVALID(3030, SliderConst.IMAGE_URL_INVALID),
+    LINK_INVALID(3031, SliderConst.LINK_INVALID),
+    CAPTION_INVALID(3032, SliderConst.CAPTION_INVALID),
+    
+    // Slider other business rules (3040-3049)
+    SLIDER_ID_POSITIVE_ERROR(3040, SliderConst.SLIDER_ID_POSITIVE),
     ;
 
     private int code;
