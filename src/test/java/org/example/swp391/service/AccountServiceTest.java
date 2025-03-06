@@ -185,78 +185,78 @@ class AccountServiceTest {
                 .hasMessageContaining("Password cannot be null");
     }
 
-//    /**
-//     * Tests successful account update with valid information.
-//     * Verifies that the account is updated and returned successfully.
-//     */
-//    @Test
-//    void updateAccount_Success() {
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//        when(accountRepository.save(any(Account.class))).thenReturn(account);
-//
-//        Account updatedAccount = accountService.updateAccount(1, accountDTO);
-//        assertThat(updatedAccount).isNotNull();
-//    }
-//
-//    /**
-//     * Tests partial account update where only some fields are provided.
-//     * Verifies that only the provided fields are updated while others remain unchanged.
-//     */
-//    @Test
-//    void updateAccount_PartialInformation() {
-//        Account existingAccount = new Account();
-//        existingAccount.setFirstName("Old");
-//        existingAccount.setLastName("Name");
-//        existingAccount.setEmail("old@example.com");
-//        existingAccount.setRole(Role.ADMIN);
-//        existingAccount.setStatus(Status.INACTIVE);
-//
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(existingAccount));
-//        when(accountRepository.save(any(Account.class))).thenReturn(existingAccount);
-//
-//        accountDTO.setFirstName("New");
-//        accountDTO.setLastName("Name");
-//        accountDTO.setEmail("new@example.com");
-//        accountDTO.setRole(null);
-//        accountDTO.setStatus(null);
-//
-//        Account updatedAccount = accountService.updateAccount(1, accountDTO);
-//        assertThat(updatedAccount.getFirstName()).isEqualTo("New");
-//        assertThat(updatedAccount.getLastName()).isEqualTo("Name");
-//        assertThat(updatedAccount.getEmail()).isEqualTo("new@example.com");
-//        assertThat(updatedAccount.getRole()).isEqualTo(Role.ADMIN);
-//        assertThat(updatedAccount.getStatus()).isEqualTo(Status.INACTIVE);
-//    }
-//
-//    /**
-//     * Tests account update with specific role and status values.
-//     * Verifies that the role and status are updated correctly.
-//     */
-//    @Test
-//    void updateAccount_RoleAndStatus() {
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//        when(accountRepository.save(any(Account.class))).thenReturn(account);
-//
-//        accountDTO.setRole(Role.ADMIN);
-//        accountDTO.setStatus(Status.INACTIVE);
-//
-//        Account updatedAccount = accountService.updateAccount(1, accountDTO);
-//        assertThat(updatedAccount.getRole()).isEqualTo(Role.ADMIN);
-//        assertThat(updatedAccount.getStatus()).isEqualTo(Status.INACTIVE);
-//    }
-//
-//    /**
-//     * Tests account update for a non-existent user ID.
-//     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
-//     */
-//    @Test
-//    void updateAccount_UserIdNotExist() {
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
-//
-//        assertThatThrownBy(() -> accountService.updateAccount(1, accountDTO))
-//                .isInstanceOf(AppException.class)
-//                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
-//    }
+    /**
+     * Tests successful account update with valid information.
+     * Verifies that the account is updated and returned successfully.
+     */
+    @Test
+    void updateAccount_Success() {
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+        Account updatedAccount = accountService.updateAccount(1, accountDTO);
+        assertThat(updatedAccount).isNotNull();
+    }
+
+    /**
+     * Tests partial account update where only some fields are provided.
+     * Verifies that only the provided fields are updated while others remain unchanged.
+     */
+    @Test
+    void updateAccount_PartialInformation() {
+        Account existingAccount = new Account();
+        existingAccount.setFirstName("Old");
+        existingAccount.setLastName("Name");
+        existingAccount.setEmail("old@example.com");
+        existingAccount.setRole(Role.ADMIN);
+        existingAccount.setStatus(Status.INACTIVE);
+
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(existingAccount));
+        when(accountRepository.save(any(Account.class))).thenReturn(existingAccount);
+
+        accountDTO.setFirstName("New");
+        accountDTO.setLastName("Name");
+        accountDTO.setEmail("new@example.com");
+        accountDTO.setRole(null);
+        accountDTO.setStatus(null);
+
+        Account updatedAccount = accountService.updateAccount(1, accountDTO);
+        assertThat(updatedAccount.getFirstName()).isEqualTo("New");
+        assertThat(updatedAccount.getLastName()).isEqualTo("Name");
+        assertThat(updatedAccount.getEmail()).isEqualTo("new@example.com");
+        assertThat(updatedAccount.getRole()).isEqualTo(Role.ADMIN);
+        assertThat(updatedAccount.getStatus()).isEqualTo(Status.INACTIVE);
+    }
+
+    /**
+     * Tests account update with specific role and status values.
+     * Verifies that the role and status are updated correctly.
+     */
+    @Test
+    void updateAccount_RoleAndStatus() {
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+        when(accountRepository.save(any(Account.class))).thenReturn(account);
+
+        accountDTO.setRole(Role.ADMIN);
+        accountDTO.setStatus(Status.INACTIVE);
+
+        Account updatedAccount = accountService.updateAccount(1, accountDTO);
+        assertThat(updatedAccount.getRole()).isEqualTo(Role.ADMIN);
+        assertThat(updatedAccount.getStatus()).isEqualTo(Status.INACTIVE);
+    }
+
+    /**
+     * Tests account update for a non-existent user ID.
+     * Verifies that an IllegalArgumentException is thrown with the appropriate message.
+     */
+    @Test
+    void updateAccount_UserIdNotExist() {
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.updateAccount(1, accountDTO))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
+    }
 
     /**
      * Tests account update when the new email already exists for another account.
@@ -309,61 +309,61 @@ class AccountServiceTest {
      * Tests account update when user has no permission to change role and status.
      * Verifies that role and status remain unchanged.
      */
-//    @Test
-//    void updateAccount_NoPermissionChangeRoleStatus() {
-//        Account existingAccount = new Account();
-//        existingAccount.setRole(Role.USER);
-//        existingAccount.setStatus(Status.ACTIVE);
-//
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(existingAccount));
-//        when(accountRepository.save(any(Account.class))).thenReturn(existingAccount);
-//
-//        accountDTO.setRole(null);
-//        accountDTO.setStatus(null);
-//
-//        Account updatedAccount = accountService.updateAccount(1, accountDTO);
-//        assertThat(updatedAccount.getRole()).isEqualTo(Role.USER);
-//        assertThat(updatedAccount.getStatus()).isEqualTo(Status.ACTIVE);
-//    }
-//
-//    /**
-//     * Tests account update with null fields.
-//     * Verifies that existing values are preserved when null values are provided.
-//     */
-//    @Test
-//    void updateAccount_NullFields() {
-//        Account existingAccount = new Account();
-//        existingAccount.setFirstName("Old");
-//        existingAccount.setLastName("Name");
-//        existingAccount.setEmail("old@example.com");
-//        existingAccount.setPhone("123456789");
-//        existingAccount.setAddress("Old Address");
-//        existingAccount.setAvatar("old.jpg");
-//        existingAccount.setRole(Role.USER);
-//        existingAccount.setStatus(Status.ACTIVE);
-//
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(existingAccount));
-//        when(accountRepository.save(any(Account.class))).thenReturn(existingAccount);
-//
-//        accountDTO.setFirstName(null);
-//        accountDTO.setLastName(null);
-//        accountDTO.setEmail(null);
-//        accountDTO.setPhone(null);
-//        accountDTO.setAddress(null);
-//        accountDTO.setAvatar(null);
-//        accountDTO.setRole(null);
-//        accountDTO.setStatus(null);
-//
-//        Account updatedAccount = accountService.updateAccount(1, accountDTO);
-//        assertThat(updatedAccount.getFirstName()).isEqualTo("Old");
-//        assertThat(updatedAccount.getLastName()).isEqualTo("Name");
-//        assertThat(updatedAccount.getEmail()).isEqualTo("old@example.com");
-//        assertThat(updatedAccount.getPhone()).isEqualTo("123456789");
-//        assertThat(updatedAccount.getAddress()).isEqualTo("Old Address");
-//        assertThat(updatedAccount.getAvatar()).isEqualTo("old.jpg");
-//        assertThat(updatedAccount.getRole()).isEqualTo(Role.USER);
-//        assertThat(updatedAccount.getStatus()).isEqualTo(Status.ACTIVE);
-//    }
+    @Test
+    void updateAccount_NoPermissionChangeRoleStatus() {
+        Account existingAccount = new Account();
+        existingAccount.setRole(Role.USER);
+        existingAccount.setStatus(Status.ACTIVE);
+
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(existingAccount));
+        when(accountRepository.save(any(Account.class))).thenReturn(existingAccount);
+
+        accountDTO.setRole(null);
+        accountDTO.setStatus(null);
+
+        Account updatedAccount = accountService.updateAccount(1, accountDTO);
+        assertThat(updatedAccount.getRole()).isEqualTo(Role.USER);
+        assertThat(updatedAccount.getStatus()).isEqualTo(Status.ACTIVE);
+    }
+
+    /**
+     * Tests account update with null fields.
+     * Verifies that existing values are preserved when null values are provided.
+     */
+    @Test
+    void updateAccount_NullFields() {
+        Account existingAccount = new Account();
+        existingAccount.setFirstName("Old");
+        existingAccount.setLastName("Name");
+        existingAccount.setEmail("old@example.com");
+        existingAccount.setPhone("123456789");
+        existingAccount.setAddress("Old Address");
+        existingAccount.setAvatar("old.jpg");
+        existingAccount.setRole(Role.USER);
+        existingAccount.setStatus(Status.ACTIVE);
+
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(existingAccount));
+        when(accountRepository.save(any(Account.class))).thenReturn(existingAccount);
+
+        accountDTO.setFirstName(null);
+        accountDTO.setLastName(null);
+        accountDTO.setEmail(null);
+        accountDTO.setPhone(null);
+        accountDTO.setAddress(null);
+        accountDTO.setAvatar(null);
+        accountDTO.setRole(null);
+        accountDTO.setStatus(null);
+
+        Account updatedAccount = accountService.updateAccount(1, accountDTO);
+        assertThat(updatedAccount.getFirstName()).isEqualTo("Old");
+        assertThat(updatedAccount.getLastName()).isEqualTo("Name");
+        assertThat(updatedAccount.getEmail()).isEqualTo("old@example.com");
+        assertThat(updatedAccount.getPhone()).isEqualTo("123456789");
+        assertThat(updatedAccount.getAddress()).isEqualTo("Old Address");
+        assertThat(updatedAccount.getAvatar()).isEqualTo("old.jpg");
+        assertThat(updatedAccount.getRole()).isEqualTo(Role.USER);
+        assertThat(updatedAccount.getStatus()).isEqualTo(Status.ACTIVE);
+    }
 
     /**
      * Tests successful account deletion for a user account.
