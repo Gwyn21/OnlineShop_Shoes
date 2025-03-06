@@ -454,265 +454,265 @@ class AccountServiceTest {
      * Tests successful account lookup by username.
      * Verifies that the correct account is returned when the username exists.
      */
-//    @Test
-//    void findByUsername_Success() {
-//        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.of(account));
-//
-//        AccountResponseDTO result = accountService.findByUsername("testuser");
-//
-//        assertThat(result).isNotNull();
-//        assertThat(result.getUsername()).isEqualTo("testuser");
-//        verify(accountMapper).toAccountResponseDTO(account);
-//    }
-//
-//    /**
-//     * Tests account lookup for a non-existent username.
-//     * Verifies that an empty Optional is returned.
-//     */
-//    @Test
-//    void findByUsername_UsernameNotExist() {
-//        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-//
-//        assertThatThrownBy(() -> accountService.findByUsername("nonExistingUser"))
-//                .isInstanceOf(AppException.class)
-//                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
-//    }
-//
-//    /**
-//     * Tests account lookup with a null username.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findByUsername_NullUsername() {
-//        assertThatThrownBy(() -> accountService.findByUsername(null))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Username cannot be null");
-//    }
-//
-//    /**
-//     * Tests account lookup with an empty username.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findByUsername_EmptyUsername() {
-//        assertThatThrownBy(() -> accountService.findByUsername(""))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Username cannot be empty");
-//    }
-//
-//    /**
-//     * Tests account lookup with a blank username.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findByUsername_BlankUsername() {
-//        assertThatThrownBy(() -> accountService.findByUsername("   "))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Username cannot be blank");
-//    }
-//
-//    /**
-//     * Tests case-insensitive username lookup.
-//     * Verifies that the correct account is returned regardless of username case.
-//     */
-//    @Test
-//    void findByUsername_CaseInsensitive() {
-//        when(accountRepository.findByUsername(anyString()))
-//                .thenAnswer(invocation -> {
-//                    String username = invocation.getArgument(0);
-//                    if (username.equalsIgnoreCase("existinguser")) {
-//                        return Optional.of(account);
-//                    }
-//                    return Optional.empty();
-//                });
-//
-//        AccountResponseDTO result = accountService.findByUsername("EXISTINGUSER");
-//        assertThat(result).isNotNull();
-//        assertThat(result.getUsername()).isEqualTo("testuser");
-//        verify(accountMapper).toAccountResponseDTO(account);
-//    }
-//
-//    /**
-//     * Tests proper Optional handling during account lookup.
-//     * Verifies that the returned Optional contains a non-null account.
-//     */
-//    @Test
-//    void findByUsername_ValidAccount() {
-//        when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(account));
-//
-//        AccountResponseDTO result = accountService.findByUsername("existingUser");
-//        assertThat(result).isNotNull();
-//        assertThat(result.getUsername()).isEqualTo("testuser");
-//    }
-//
-//    /**
-//     * Tests successful account lookup by email.
-//     * Verifies that the correct account is returned when the email exists.
-//     */
-//    @Test
-//    void findByEmail_Success() {
-//        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.of(account));
-//
-//        AccountResponseDTO result = accountService.findByEmail("test@example.com");
-//
-//        assertThat(result).isNotNull();
-//        assertThat(result.getEmail()).isEqualTo("test@example.com");
-//        verify(accountMapper).toAccountResponseDTO(account);
-//    }
-//
-//    /**
-//     * Tests account lookup for a non-existent email.
-//     * Verifies that an empty Optional is returned.
-//     */
-//    @Test
-//    void findByEmail_EmailNotExist() {
-//        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-//
-//        assertThatThrownBy(() -> accountService.findByEmail("nonExisting@example.com"))
-//                .isInstanceOf(AppException.class)
-//                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
-//    }
-//
-//    /**
-//     * Tests account lookup with a null email.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findByEmail_NullEmail() {
-//        assertThatThrownBy(() -> accountService.findByEmail(null))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Email cannot be null");
-//    }
-//
-//    /**
-//     * Tests account lookup with an empty email.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findByEmail_EmptyEmail() {
-//        assertThatThrownBy(() -> accountService.findByEmail(""))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Email cannot be empty");
-//    }
-//
-//    /**
-//     * Tests account lookup with a blank email.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findByEmail_BlankEmail() {
-//        assertThatThrownBy(() -> accountService.findByEmail("   "))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("Email cannot be blank");
-//    }
-//
-//    /**
-//     * Tests case-insensitive email lookup.
-//     * Verifies that the correct account is returned regardless of email case.
-//     */
-//    @Test
-//    void findByEmail_CaseInsensitive() {
-//        when(accountRepository.findByEmail(anyString()))
-//                .thenAnswer(invocation -> {
-//                    String email = invocation.getArgument(0);
-//                    if (email.equalsIgnoreCase("existing@example.com")) {
-//                        return Optional.of(account);
-//                    }
-//                    return Optional.empty();
-//                });
-//
-//        AccountResponseDTO result = accountService.findByEmail("EXISTING@EXAMPLE.COM");
-//        assertThat(result).isNotNull();
-//        assertThat(result.getEmail()).isEqualTo("test@example.com");
-//        verify(accountMapper).toAccountResponseDTO(account);
-//    }
-//
-//    /**
-//     * Tests proper Optional handling during account lookup.
-//     * Verifies that the returned Optional contains a non-null account.
-//     */
-//    @Test
-//    void findByEmail_ValidAccount() {
-//        when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(account));
-//
-//        AccountResponseDTO result = accountService.findByEmail("existing@example.com");
-//        assertThat(result).isNotNull();
-//        assertThat(result.getEmail()).isEqualTo("test@example.com");
-//    }
-//
-//    /**
-//     * Tests successful account lookup by ID.
-//     * Verifies that the correct account is returned when the ID exists.
-//     */
-//    @Test
-//    void findById_Success() {
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
-//
-//        AccountResponseDTO result = accountService.findById(1);
-//
-//        assertThat(result).isNotNull();
-//        assertThat(result.getUserId()).isEqualTo(1);
-//        verify(accountMapper).toAccountResponseDTO(account);
-//    }
-//
-//    /**
-//     * Tests account lookup for a non-existent ID.
-//     * Verifies that an empty Optional is returned.
-//     */
-//    @Test
-//    void findById_UserIdNotExist() {
-//        when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
-//
-//        assertThatThrownBy(() -> accountService.findById(999))
-//                .isInstanceOf(AppException.class)
-//                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
-//    }
-//
-//    /**
-//     * Tests account lookup with a null ID.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findById_NullUserId() {
-//        assertThatThrownBy(() -> accountService.findById(null))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("User ID cannot be null");
-//    }
-//
-//    /**
-//     * Tests account lookup with a negative ID.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findById_NegativeUserId() {
-//        assertThatThrownBy(() -> accountService.findById(-1))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("User ID must be positive");
-//    }
-//
-//    /**
-//     * Tests account lookup with a zero ID.
-//     * Verifies that an IllegalArgumentException is thrown.
-//     */
-//    @Test
-//    void findById_ZeroUserId() {
-//        assertThatThrownBy(() -> accountService.findById(0))
-//                .isInstanceOf(IllegalArgumentException.class)
-//                .hasMessageContaining("User ID must be positive");
-//    }
-//
-//    /**
-//     * Tests proper Optional handling during account lookup.
-//     * Verifies that the returned Optional contains a non-null account.
-//     */
-//    @Test
-//    void findById_ValidAccount() {
-//        when(accountRepository.findById(1)).thenReturn(Optional.of(account));
-//
-//        AccountResponseDTO result = accountService.findById(1);
-//        assertThat(result).isNotNull();
-//        assertThat(result.getUserId()).isEqualTo(1);
-//    }
+    @Test
+    void findByUsername_Success() {
+        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.of(account));
+
+        AccountResponseDTO result = accountService.findByUsername("testuser");
+
+        assertThat(result).isNotNull();
+        assertThat(result.getUsername()).isEqualTo("testuser");
+        verify(accountMapper).toAccountResponseDTO(account);
+    }
+
+    /**
+     * Tests account lookup for a non-existent username.
+     * Verifies that an empty Optional is returned.
+     */
+    @Test
+    void findByUsername_UsernameNotExist() {
+        when(accountRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.findByUsername("nonExistingUser"))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
+    }
+
+    /**
+     * Tests account lookup with a null username.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByUsername_NullUsername() {
+        assertThatThrownBy(() -> accountService.findByUsername(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be null");
+    }
+
+    /**
+     * Tests account lookup with an empty username.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByUsername_EmptyUsername() {
+        assertThatThrownBy(() -> accountService.findByUsername(""))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be empty");
+    }
+
+    /**
+     * Tests account lookup with a blank username.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByUsername_BlankUsername() {
+        assertThatThrownBy(() -> accountService.findByUsername("   "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Username cannot be blank");
+    }
+
+    /**
+     * Tests case-insensitive username lookup.
+     * Verifies that the correct account is returned regardless of username case.
+     */
+    @Test
+    void findByUsername_CaseInsensitive() {
+        when(accountRepository.findByUsername(anyString()))
+                .thenAnswer(invocation -> {
+                    String username = invocation.getArgument(0);
+                    if (username.equalsIgnoreCase("existinguser")) {
+                        return Optional.of(account);
+                    }
+                    return Optional.empty();
+                });
+
+        AccountResponseDTO result = accountService.findByUsername("EXISTINGUSER");
+        assertThat(result).isNotNull();
+        assertThat(result.getUsername()).isEqualTo("testuser");
+        verify(accountMapper).toAccountResponseDTO(account);
+    }
+
+    /**
+     * Tests proper Optional handling during account lookup.
+     * Verifies that the returned Optional contains a non-null account.
+     */
+    @Test
+    void findByUsername_ValidAccount() {
+        when(accountRepository.findByUsername("existingUser")).thenReturn(Optional.of(account));
+
+        AccountResponseDTO result = accountService.findByUsername("existingUser");
+        assertThat(result).isNotNull();
+        assertThat(result.getUsername()).isEqualTo("testuser");
+    }
+
+    /**
+     * Tests successful account lookup by email.
+     * Verifies that the correct account is returned when the email exists.
+     */
+    @Test
+    void findByEmail_Success() {
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.of(account));
+
+        AccountResponseDTO result = accountService.findByEmail("test@example.com");
+
+        assertThat(result).isNotNull();
+        assertThat(result.getEmail()).isEqualTo("test@example.com");
+        verify(accountMapper).toAccountResponseDTO(account);
+    }
+
+    /**
+     * Tests account lookup for a non-existent email.
+     * Verifies that an empty Optional is returned.
+     */
+    @Test
+    void findByEmail_EmailNotExist() {
+        when(accountRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.findByEmail("nonExisting@example.com"))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
+    }
+
+    /**
+     * Tests account lookup with a null email.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByEmail_NullEmail() {
+        assertThatThrownBy(() -> accountService.findByEmail(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be null");
+    }
+
+    /**
+     * Tests account lookup with an empty email.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByEmail_EmptyEmail() {
+        assertThatThrownBy(() -> accountService.findByEmail(""))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be empty");
+    }
+
+    /**
+     * Tests account lookup with a blank email.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findByEmail_BlankEmail() {
+        assertThatThrownBy(() -> accountService.findByEmail("   "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Email cannot be blank");
+    }
+
+    /**
+     * Tests case-insensitive email lookup.
+     * Verifies that the correct account is returned regardless of email case.
+     */
+    @Test
+    void findByEmail_CaseInsensitive() {
+        when(accountRepository.findByEmail(anyString()))
+                .thenAnswer(invocation -> {
+                    String email = invocation.getArgument(0);
+                    if (email.equalsIgnoreCase("existing@example.com")) {
+                        return Optional.of(account);
+                    }
+                    return Optional.empty();
+                });
+
+        AccountResponseDTO result = accountService.findByEmail("EXISTING@EXAMPLE.COM");
+        assertThat(result).isNotNull();
+        assertThat(result.getEmail()).isEqualTo("test@example.com");
+        verify(accountMapper).toAccountResponseDTO(account);
+    }
+
+    /**
+     * Tests proper Optional handling during account lookup.
+     * Verifies that the returned Optional contains a non-null account.
+     */
+    @Test
+    void findByEmail_ValidAccount() {
+        when(accountRepository.findByEmail("existing@example.com")).thenReturn(Optional.of(account));
+
+        AccountResponseDTO result = accountService.findByEmail("existing@example.com");
+        assertThat(result).isNotNull();
+        assertThat(result.getEmail()).isEqualTo("test@example.com");
+    }
+
+    /**
+     * Tests successful account lookup by ID.
+     * Verifies that the correct account is returned when the ID exists.
+     */
+    @Test
+    void findById_Success() {
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.of(account));
+
+        AccountResponseDTO result = accountService.findById(1);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getUserId()).isEqualTo(1);
+        verify(accountMapper).toAccountResponseDTO(account);
+    }
+
+    /**
+     * Tests account lookup for a non-existent ID.
+     * Verifies that an empty Optional is returned.
+     */
+    @Test
+    void findById_UserIdNotExist() {
+        when(accountRepository.findById(anyInt())).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> accountService.findById(999))
+                .isInstanceOf(AppException.class)
+                .hasMessageContaining(ErrorCode.ACCOUNT_NOT_EXIST_ERROR.getMessage());
+    }
+
+    /**
+     * Tests account lookup with a null ID.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findById_NullUserId() {
+        assertThatThrownBy(() -> accountService.findById(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("User ID cannot be null");
+    }
+
+    /**
+     * Tests account lookup with a negative ID.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findById_NegativeUserId() {
+        assertThatThrownBy(() -> accountService.findById(-1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("User ID must be positive");
+    }
+
+    /**
+     * Tests account lookup with a zero ID.
+     * Verifies that an IllegalArgumentException is thrown.
+     */
+    @Test
+    void findById_ZeroUserId() {
+        assertThatThrownBy(() -> accountService.findById(0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("User ID must be positive");
+    }
+
+    /**
+     * Tests proper Optional handling during account lookup.
+     * Verifies that the returned Optional contains a non-null account.
+     */
+    @Test
+    void findById_ValidAccount() {
+        when(accountRepository.findById(1)).thenReturn(Optional.of(account));
+
+        AccountResponseDTO result = accountService.findById(1);
+        assertThat(result).isNotNull();
+        assertThat(result.getUserId()).isEqualTo(1);
+    }
 }
 
 
