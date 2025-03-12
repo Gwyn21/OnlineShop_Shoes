@@ -1,7 +1,7 @@
-//package org.example.swp391.entity;
-//
-//public enum Status {
-//    ACTIVE,
-//    INACTIVE,
-//    BANNED
-//}
+package org.example.swp391.entity;
+
+public enum Status {
+    ACTIVE,
+    INACTIVE,
+    BANNED
+}
